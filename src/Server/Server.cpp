@@ -4,27 +4,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <arpa/inet.h>
-
-const char* htmlResponse =
-        "HTTP/1.1 200 OK\r\n"
-        "Content-Type: text/html\r\n"
-        "Connection: close\r\n"
-        "\r\n"
-        "<!DOCTYPE html>"
-        "<html lang='de'>"
-        "<head>"
-        "<meta charset='UTF-8'>"
-        "<meta name='viewport' content='width=device-width, initial-scale=1.0'>"
-        "<title>Messagebox</title>"
-        "<script>"
-        "window.onload = function() {"
-        "   alert('Willkommen auf dem C++-Server!');"
-        "};"
-        "</script>"
-        "</head>"
-        "<body><h1>Hallo! Dein C++-Socket-Server läuft.</h1></body>"
-        "</html>";
-
+#include "../../include/json.hpp"
 
 Server::Server(int PORT) {
     _serverSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -55,8 +35,9 @@ Server::Server(int PORT) {
             std::cerr << "Verbindung fehlgeschlagen" << std::endl;
             continue;
         }
+        _json[_socket] = 1;
 
-        send(_socket, htmlResponse, strlen(htmlResponse), 0);
+        // send(_socket, htmlResponse, strlen(htmlResponse), 0);
         close(_socket);
     }
 
